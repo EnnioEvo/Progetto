@@ -1,7 +1,7 @@
 clear all
 close all
-load WSsezval50.mat
-filename = 'prova1.mat'
+load WSsezval300.mat
+filename = 'TSsezval300.mat'
 offset=0;
 idx = find(vetT>=Tstep,1);
 
