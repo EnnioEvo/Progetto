@@ -1,13 +1,20 @@
+clear all
+close all
+load WSsezval50.mat
 filename = 'prova1.mat'
+offset=0;
+idx = find(vetT>=Tstep,1);
 
-tScalino = find(veta == (veta(1) + DeltaA));
-tScalino = tScalino(1); 
-vetT = vetT - vetT(tScalino-2);
-vetT = vetT(tScalino-2:end);
-veta = veta(tScalino-2:end);
-vetH = vetH(tScalino-2:end);
+vetT = vetT(idx-offset:end);
+vetT = vetT-vetT(1);
+veta = veta(idx-offset:end);
+vetH = vetH(idx-offset:end);
 
-e = tsdata.event('Scalino',1);
+diffa = diff(veta);
+idx2 = find(max(diffa)==diffa);
+tScalino = vetT(idx2);
+
+e = tsdata.event('Scalino',tScalino);
 alfa = timeseries(veta, vetT);
 alfa.name = 'alfa';
 alfa.datainfo.units = '-';
@@ -18,15 +25,13 @@ h.datainfo.units = 'm';
 addevent(h,e);
 
 WDS = struct('N',N,'scabrezza', scabrezza, 'diametro', Ddato, 'c', c, 'sezval', sezval, 'sezpiezo', sezpiezo, 'Velreg', Velreg, 'deltaX', deltaX);
-WP = struct('alfa',a,'H',mean(serbatoio),'D',mean(portata),'h',mean(vetH));
+WP = struct('alfa',mean(alfa.data(1:idx2)),'H',mean(serbatoio),'D',mean(portata),'h',mean(h.data(1:idx2)));
 film = struct('N',N, 'Tfin', Tfin, 'H', Hcampionato, 'Q',Qcampionato);
 
 subplot(2,1,1);
 plot(alfa);
-title('alfa della valvola nel tempo')
 
 subplot(2,1,2);
 plot(h);
-title('Pressione h nel tempo')
 
-save(filename,'film','WP','WDS');
+save(filename,'film','WP','WDS','alfa','h');
