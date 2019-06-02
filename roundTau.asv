@@ -1,0 +1,18 @@
+function [tauPiuVR, tauPiuSR, tauMenoVR, tauMenoSR] = roundTau(tauPiuV, tauPiuS, tauMenoV, tauMenoS, tSamp)
+    round1vector = @(tau)unique(round(tauPiuV/tSamp)*tSamp,first);
+    
+    tauPiuVR = round(tauPiuV/tSamp)*tSamp;
+    tauPiuVR = unique(tauPiuVR,'first');
+    tauPiuSR = round(tauPiuS/tSamp)*tSamp;
+    tauPiuSR = unique(tauPiuSR,'first');
+    tauMenoVR = round(tauMenoV/tSamp)*tSamp;
+    tauMenoVR = unique(tauMenoVR,'first');
+    tauMenoSR = round(tauMenoS/tSamp)*tSamp;
+    tauMenoSR = unique(tauMenoSR,'first');
+    
+    
+    
+    
+    
+end
+

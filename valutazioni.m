@@ -1,26 +1,24 @@
 clear all
-load TSsezval300.mat
-filename = 'TAUsezval300.mat';
+load TSsezval50.mat
+filename = 'TAUsezval50.mat';
 dh = tserieVariazioni(h,WP.h);
 dalfa = tserieVariazioni(alfa,WP.alfa);
-
+nTau = 5; %numero di tau da calcolare
+tSamp = h.time(2)-h.time(1);
 
 %rilevo nel vettore h.data le variazioni tra un elemento e
-%il successivo maggiori di thresholdWave, t.
+%il successivo maggiori di thresholdWave e distanti almeno t.
 thresholdWave = 0.3;
 thresholdTime = 10;
-tauObservedRaw = h.time(find(h.data(1:end-1) - h.data(2:end)>0.3))';
+tauObservedRaw = dh.time(find(dh.data(1:end-1) - dh.data(2:end)>0.3))'
 tauObserved = [tauObservedRaw(1),tauObservedRaw(find(tauObservedRaw(2:end)-tauObservedRaw(1:end-1)>thresholdTime)+1)]
 %calcolo i ritardi
-[tauPiuV, tauPiuS, tauMenoV, tauMenoS] = (calcolaTau(5,WDS));
-%mixo i vettori tauPiuV e tauMenoV
-tauV(1:2:2*numel(tauPiuV)) = tauPiuV;
-tauV(2:2:end) = tauMenoV;
-%mixo i vettori tauPiuS e tauMenoS
-tauS(1:2:2*numel(tauPiuS)) = tauPiuS;
-tauS(2:2:end) = tauMenoS;
+[tauPiuV, tauPiuS, tauMenoV, tauMenoS] = calcolaTau(nTau,WDS);
+[tauPiuV, tauPiuS, tauMenoV, tauMenoS] = roundTau(tauPiuV, tauPiuS, tauMenoV, tauMenoS,tSamp);
 
-tauV
-tauS
+%mixo i vettori per confrontarli con tauObserved
+tauV = mixTau(tauPiuV,tauMenoV)
+tauS = mixTau(tauPiuS,tauMenoS)
 
-save(filename, 'tauObserved', 'tauV', 'tauS');
+
+save(filename, 'tauObserved', 'tauPiuV', 'tauPiuS', 'tauMenoV', 'tauMenoS');

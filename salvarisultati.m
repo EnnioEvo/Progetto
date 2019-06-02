@@ -1,7 +1,7 @@
 clear all
 close all
-load WSsezval300.mat
-filename = 'TSsezval300.mat'
+load WSsezval50.mat
+filename = 'TSsezval50.mat'
 offset=0;
 idx = find(vetT>=Tstep,1);
 
@@ -23,6 +23,11 @@ h = timeseries(vetH, vetT);
 h.name = 'h';
 h.datainfo.units = 'm';
 addevent(h,e);
+
+tSamp = mean(diff(vetT));
+vetTUniform = tSamp*(0:numel(vetT)-1);
+alfa = resample(alfa,vetTUniform);
+h = resample(h,vetTUniform);
 
 WDS = struct('N',N,'scabrezza', scabrezza, 'diametro', Ddato, 'c', c, 'sezval', sezval, 'sezpiezo', sezpiezo, 'Velreg', Velreg, 'deltaX', deltaX);
 WP = struct('alfa',mean(alfa.data(1:idx2)),'H',mean(serbatoio),'D',mean(portata),'h',mean(h.data(1:idx2)));

@@ -1,7 +1,6 @@
-function tsOut = tserieVariazioni(tsIn,scalare)
-    %tsOut = tsIn...
-    tsOut = timeseries(tsIn.data - scalare,tsIn.time);
-    tsOut.name = ['d',tsIn.name];
-    tsOut.events = tsIn.events;
+function tsOut = tserieVariazioni(tsIn,scalar)
+    tsOut = tsIn;
+    tsOut.data = tsOut.data - scalar;
+    tsOut.name = ['d',tsOut.name];
 end
 
