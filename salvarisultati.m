@@ -1,7 +1,7 @@
 clear all
 close all
-load WSsezval50.mat
-filename = 'TSsezval50.mat'
+load WSsezval50alfa30.mat
+filename = 'TSsezval50alfa30.mat'
 offset=0;
 idx = find(vetT>=Tstep,1);
 
@@ -24,10 +24,14 @@ h.name = 'h';
 h.datainfo.units = 'm';
 addevent(h,e);
 
-tSamp = mean(diff(vetT));
-vetTUniform = tSamp*(0:numel(vetT)-1);
-alfa = resample(alfa,vetTUniform);
-h = resample(h,vetTUniform);
+
+if min(diff(vetT))<max(diff(vetT))
+    tSamp = round(mean(diff(vetT)));
+    disp(['Ricampiono a ', num2str(tSamp), 's']);
+    vetTUniform = tSamp*(0:numel(vetT)-1);
+    alfa = resample(alfa,vetTUniform);
+    h = resample(h,vetTUniform);
+end
 
 WDS = struct('N',N,'scabrezza', scabrezza, 'diametro', Ddato, 'c', c, 'sezval', sezval, 'sezpiezo', sezpiezo, 'Velreg', Velreg, 'deltaX', deltaX);
 WP = struct('alfa',mean(alfa.data(1:idx2)),'H',mean(serbatoio),'D',mean(portata),'h',mean(h.data(1:idx2)));
@@ -35,7 +39,6 @@ film = struct('N',N, 'Tfin', Tfin, 'H', Hcampionato, 'Q',Qcampionato);
 
 subplot(2,1,1);
 plot(alfa);
-
 subplot(2,1,2);
 plot(h);
 
