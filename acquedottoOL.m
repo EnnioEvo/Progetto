@@ -1,10 +1,14 @@
 clc
-clear
-for a_iniziale = [0.3,0.67]
-    for sezval = [50,150,200]
-        %a_iniziale=0.67; %originale 0.67
+clear variables
+for a_iniziale = 0.7
+    for sezval = 50
+        
+        %a_iniziale=0.69; %originale 0.67
         a=a_iniziale;
-        Tstep = 10;  
+        demand = 0.1;
+        
+        
+        tStep = 50;  
         DeltaA = 0.1*a;
 
         %%
@@ -12,7 +16,7 @@ for a_iniziale = [0.3,0.67]
         Ddato = 0.45;                    % CARATTERISTICHE TOPOLOGICHE: diametro conduttura %
         c = 407.9;                       % CARATTERISTICHE TOPOLOGICHE: celerità delle onde %
         %sezval = 300;  %50 originalmente % CARATTERISTICHE TOPOLOGICHE: sezione nella quale viene posta la valvola %
-        sezpiezo = 1000;
+        sezpiezo = 1900;
         Velreg = 1;                   % CARATTERISTICHE TOPOLOGICHE: Velocità massima di spostamento della valvola
         N = 2000;     
         deltaX = 5;         %CARATTERISTICHE TOPOLOGICHE: deltaX scelto per la discretizzazione del problema % 
@@ -20,15 +24,16 @@ for a_iniziale = [0.3,0.67]
         deltaT = deltaX/c;               % DATI DEL PROBLEMA : deltaT di integrazione, ricavato conoscendo c e dopo aver impostato deltaX %
         Nistanti = 80000;                % DATI DEL PROBLEMA : numero di instanti di tempo, ciscuno pari a deltaT, per i quali viene svolto l'esperimento % 
         Tfin=Nistanti.*deltaT;           % DATI DEL PROBLEMA : durata totale dell'esperimento %
-        Tfin=150;
+        Tfin=250;
         dTpattern = 1;                   % DATI DEL PROBLEMA : intervalli di tempo per i quali viene valutata la portata richiesta ed il carico del serbatoio %
         g = 9.81;                        % DATI DEL PROBLEMA : modulo dell'accelerazione di gravità %
         %%
         load serbatoioCostante.txt
         serbatoio=serbatoioCostante; %H
         load portataAggregata.txt
-        portata=mean(portataAggregata)*ones(size(portataAggregata));                                                    % funzione che carica nel workspace il vettore colonna della portata richiesta durante un'intera giornata %
-
+        %portata=mean(portataAggregata)*ones(size(portataAggregata));                                                    % funzione che carica nel workspace il vettore colonna della portata richiesta durante un'intera giornata %
+        portata=demand*ones(size(portataAggregata));                                                    % funzione che carica nel workspace il vettore colonna della portata richiesta durante un'intera giornata %
+        
         %%
         Ndati=size(portata,1);
 
@@ -181,11 +186,12 @@ for a_iniziale = [0.3,0.67]
                Qcampionato(:,indice)=(interp1(X,Y2,dt1))'; 
                Apertura(indice,:) = a;
                vetH=[vetH;Hcampionato(1 + sezpiezo,indice)];
-
+               trash = Hcampionato(1 + sezpiezo,indice);
+                
                %salvare=[vetT,veta,vetH];
                %save salvare.txt salvare -ASCII
 
-               if T>=Tstep
+               if T>=tStep
                    %anew = 0.75;
                    anew = veta(1) + DeltaA;
                    spostrich=anew-a;
@@ -200,8 +206,8 @@ for a_iniziale = [0.3,0.67]
             spostrich=spostrich-spostmax; %ecco la variazione che resta da fare alla fine del deltaT
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         end
-        filename = ['WSsezval',num2str(sezval),'alfa',num2str(a_iniziale*100),'.mat']
-        save(filename)
+        filename = ['sv',num2str(sezval),'a',num2str(a_iniziale*100),'d',num2str(demand*100),'sp',num2str(sezpiezo)];
+        save(['WS',filename,'.mat'])
     end
 end
         %run salvarisultati.m;

@@ -1,9 +1,16 @@
-clear all
+clear variables
 close all
-load WSsezval50alfa30.mat
-filename = 'TSsezval50alfa30.mat'
-offset=0;
-idx = find(vetT>=Tstep,1);
+
+valueSezval = 50;
+valueAlfa = 70;
+valueDemand = 10;
+valueSezpiezo = 1900;
+filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand),'sp',num2str(valueSezpiezo)];
+load(['WS',filename,'.mat']);
+%Input:WS, Output: TS
+
+offset=50;
+idx = find(vetT>=tStep,1);
 
 vetT = vetT(idx-offset:end);
 vetT = vetT-vetT(1);
@@ -42,4 +49,4 @@ plot(alfa);
 subplot(2,1,2);
 plot(h);
 
-save(filename,'film','WP','WDS','alfa','h');
+save(['TS',filename,'.mat'],'film','WP','WDS','alfa','h','tStep');
