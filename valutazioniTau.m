@@ -1,16 +1,18 @@
 clear variables;
-valuesSezval = 50;
-valuesAlfa = 70;
-valueDemand = 10;
-valueSezpiezo = 1900;
+close all;
 
+valuesSezval = 300;
+valuesAlfa = 69;
+valueDemand = 0.10;
+valueSezpiezo = 1000;
+segno = '';
 %Input:TS, Output: TAU
 
 count = 1;
 for valueSezval = valuesSezval
     for valueAlfa = valuesAlfa
         
-        filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand),'sp',num2str(valueSezpiezo)];
+        filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
         load(['TS',filename,'.mat']);
         
         
@@ -31,13 +33,15 @@ for valueSezval = valuesSezval
         %plotto i ritardi calcolati sopra il plot di h
         set(gcf, 'Units', 'Normalized', 'OuterPosition', [0, 0, 1, 1]);
         subplot(numel(valuesSezval),numel(valuesAlfa),count);
+        figure(1)
         plotTau(dh,tStep, tauPiuVR, 'ro', 'red', tauMenoVR, 'ro', 'magenta', tauPiuSR, 'rs', 'blue', tauMenoSR, 'rs', 'cyan');
-        
+        grid on;
         if count == 1
             legend('Simulazione','Valvola+','Valvola-','Serbatoio+','Serbatoio-');
         end
         count = count + 1;
         
+        filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
         save(['TAU',filename,'.mat'],'dalfa','dh','tStep','tauPiuVR', 'tauPiuSR', 'tauMenoVR', 'tauMenoSR');
     end
 end

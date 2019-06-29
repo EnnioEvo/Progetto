@@ -2,10 +2,11 @@ clear variables;
 close all;
 
 valueSezval = 50;
-valueAlfa = 70;
-valueDemand = 10;
-valueSezpiezo = 1900;
-filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand),'sp',num2str(valueSezpiezo)];
+valueAlfa = 69;
+valueDemand = 0.10;
+valueSezpiezo = 1000;
+segno = 'N';
+filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
 load(['TAU',filename,'.mat']);
 
 [phi,y] = calcolaPhiEY(dalfa, dh, tauPiuVR);
@@ -15,6 +16,7 @@ G = calcolaG(theta, tauPiuVR);
 
 figure(1)
 bode(G);
+grid on;
 title('Bode di G');
 
 figure(2);
@@ -24,6 +26,6 @@ title(['SezVal=',num2str(valueSezval),', alfa=',num2str(valueAlfa/100),', D=',nu
 figure(3);
 nyquist(G);
 
+filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
 savefig(['PicSim',filename,'.fig']);
-
 save(['SIM',filename,'.mat']);

@@ -1,22 +1,22 @@
 clc
 clear variables
-for a_iniziale = 0.7
+for a_iniziale = 0.69
     for sezval = 50
         
         %a_iniziale=0.69; %originale 0.67
         a=a_iniziale;
-        demand = 0.1;
+        demand = 0.10;
         
         
         tStep = 50;  
-        DeltaA = 0.1*a;
+        DeltaA = -0.1*a;
 
         %%
         scabrezza = 0.01;                % CARATTERISTICHE TOPOLOGICHE: scabrezza conduttura %
         Ddato = 0.45;                    % CARATTERISTICHE TOPOLOGICHE: diametro conduttura %
         c = 407.9;                       % CARATTERISTICHE TOPOLOGICHE: celerità delle onde %
         %sezval = 300;  %50 originalmente % CARATTERISTICHE TOPOLOGICHE: sezione nella quale viene posta la valvola %
-        sezpiezo = 1900;
+        sezpiezo = 1000;
         Velreg = 1;                   % CARATTERISTICHE TOPOLOGICHE: Velocità massima di spostamento della valvola
         N = 2000;     
         deltaX = 5;         %CARATTERISTICHE TOPOLOGICHE: deltaX scelto per la discretizzazione del problema % 
@@ -24,7 +24,7 @@ for a_iniziale = 0.7
         deltaT = deltaX/c;               % DATI DEL PROBLEMA : deltaT di integrazione, ricavato conoscendo c e dopo aver impostato deltaX %
         Nistanti = 80000;                % DATI DEL PROBLEMA : numero di instanti di tempo, ciscuno pari a deltaT, per i quali viene svolto l'esperimento % 
         Tfin=Nistanti.*deltaT;           % DATI DEL PROBLEMA : durata totale dell'esperimento %
-        Tfin=250;
+        Tfin=350;
         dTpattern = 1;                   % DATI DEL PROBLEMA : intervalli di tempo per i quali viene valutata la portata richiesta ed il carico del serbatoio %
         g = 9.81;                        % DATI DEL PROBLEMA : modulo dell'accelerazione di gravità %
         %%
@@ -206,7 +206,12 @@ for a_iniziale = 0.7
             spostrich=spostrich-spostmax; %ecco la variazione che resta da fare alla fine del deltaT
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         end
-        filename = ['sv',num2str(sezval),'a',num2str(a_iniziale*100),'d',num2str(demand*100),'sp',num2str(sezpiezo)];
+        
+        segno = '';
+        if DeltaA<0
+            segno = 'N';
+        end
+        filename = ['sv',num2str(sezval),'a',num2str(a_iniziale*100),'d',num2str(demand*100),'sp',num2str(sezpiezo),segno];
         save(['WS',filename,'.mat'])
     end
 end
