@@ -25,8 +25,13 @@ G = calcolaG(theta, tauPiuVR);
 
 %Plotto Bode
 figure(1)
-bode(G);
-grid on;
+[mag,phase,wout] = bode(G);
+subplot(2,1,1)
+semilogx(wout, 20*log10(squeeze(mag)), 'LineWidth',2)
+grid
+subplot(2,1,2)
+semilogx(wout, squeeze(phase), 'LineWidth',2)
+grid
 title('Bode di G');
 
 %Plotto Nyquist

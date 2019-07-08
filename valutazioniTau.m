@@ -33,16 +33,17 @@ for valueSezval = valuesSezval
         dalfa = tserieVariazioni(alfa,WP.alfa);
        
         %calcolo i ritardi
-        nTau = 6; %numero di tau da calcolare
-        [tauPiuV, tauMenoV, tauPiuS, tauMenoS] = calcolaTau(nTau,WDS);
+        tFin = 200; %calcolare i ritardi non superiori a 200
+        [tauPiuV, tauMenoV, tauPiuS, tauMenoS] = calcolaTau(tFin,WDS)
+        
         %approssimo i ritardi al tempo di campionamento
+        tSamp = h.time(2)-h.time(1);
         tauPiuVR = roundTau(tauPiuV,tSamp);
         tauMenoVR = roundTau(tauMenoV,tSamp);
         tauPiuSR = roundTau(tauPiuS,tSamp);
         tauMenoSR = roundTau(tauMenoS,tSamp);
         
         %arrotondo tStep al tempo di campionamento
-        tSamp = h.time(2)-h.time(1);
         tStep = roundTau(tStep, tSamp);
         
         %plotto i ritardi calcolati sopra il plot di h

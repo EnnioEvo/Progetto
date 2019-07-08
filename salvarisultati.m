@@ -62,10 +62,10 @@ film = struct('N',N, 'Tfin', Tfin, 'H', Hcampionato, 'Q',Qcampionato);
 
 %plotto le due timeseries
 subplot(2,1,1);
-plot(alfa);
+plot(alfa,'LineWidth',2);
 grid on
 subplot(2,1,2);
-plot(h);
+plot(h,'LineWidth',2);
 grid on
 
 %salvo nel formato TSsvXXaXXdXXspXXXX[N].mat

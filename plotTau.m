@@ -26,19 +26,18 @@ function [] = plotTau(varargin)
     tStep = varargin{2};
     
     %trovo l'indice di tStep nel vettore dei tempi
-    idxTStep = find(dh.time==tStep,1);
+    idxTStep = tStep/(dh.time(2)-dh.time(1))+1;
     
     %plotto la timeSerie
-    plot(dh);
+    plot(dh,'LineWidth',2);
     hold on
     
     for i=1:nTau
         tau = varargin{3*i};
         type = varargin{3*i + 1};
         color = varargin{3*i + 2};
-        %Cancellare se il codice funziona: idxTau = cell2mat(arrayfun(trovaXInDhTime , tau, 'un', 0));
-        idxTau = tau/(dh.time(2)-dh.time(1));
-        plot(dh.time(idxTau+idxTStep),dh.data(idxTau+idxTStep),type,'MarkerEdgeColor',color);
+        idxTau = tau/(dh.time(2)-dh.time(1)) + 1;
+        plot(dh.time(idxTau+idxTStep-1),dh.data(idxTau+idxTStep-1),type,'MarkerEdgeColor',color,'LineWidth',2);
         hold on
     end
     hold off
