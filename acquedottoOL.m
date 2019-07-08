@@ -215,7 +215,6 @@ for a_iniziale = 0.69
         
         %salvo nel formato WSsvXXaXXdXXspXXXX[N].mat
         filename = ['sv',num2str(sezval),'a',num2str(a_iniziale*100),'d',num2str(demand*100),'sp',num2str(sezpiezo),segno];
-        save(['WS',filename,'.mat'])
+        save(['workspaces/WS',filename,'.mat'])
     end
 end
-        %run salvarisultati.m;

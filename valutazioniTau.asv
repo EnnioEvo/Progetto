@@ -1,0 +1,64 @@
+%valutazioniTau confronta graficamente i ritardi calcolati con quelli
+%osservati nella simulazione.
+%-carica un workspace TSsvXXaXXdXXspXXXX.mat contenente i dati topologici
+%WDS e le timeseries h e alfa
+%-crea le timeseries dh e dalfa delle variazioni di h e alfa
+%-calcola i ritardi e li arrotonda al tempo di campionamento delle
+%timeseries
+%-esegue il plot nello stesso riquadro la timeserie dh e i ritardi 
+%calcolati
+%-salva i ritardi calcolati in un file TAUsvXXaXXdXXspXXXX.mat
+
+clear variables;
+close all;
+
+%carico il file
+valuesSezval = 300;
+valuesAlfa = 69;
+valueDemand = 0.10;
+valueSezpiezo = 1000;
+segno = '';
+%Input:TS, Output: TAU
+
+count = 1;
+for valueSezval = valuesSezval
+    for valueAlfa = valuesAlfa
+        
+        %carico un workspace TSsvXXaXXdXXspXXXX[N].mat
+        filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
+        load(['workspaces/TS',filename,'.mat']);
+        
+        %costruisco le timeserie delle variazioni
+        dh = tserieVariazioni(h,WP.h);
+        dalfa = tserieVariazioni(alfa,WP.alfa);
+       
+        %calcolo i ritardi
+        tFin = 200; %calcolare i ritardi non superiori a 200
+        [tauPiuV, tauMenoV, tauPiuS, tauMenoS] = calcolaTau(tFin,WDS)
+        
+        %approssimo i ritardi al tempo di campionamento
+        tSamp = h.time(2)-h.time(1);
+        tauPiuVR = roundTau(tauPiuV,tSamp);
+        tauMenoVR = roundTau(tauMenoV,tSamp);
+        tauPiuSR = roundTau(tauPiuS,tSamp);
+        tauMenoSR = roundTau(tauMenoS,tSamp);
+        
+        %arrotondo tStep al tempo di campionamento
+        tStep = roundTau(tStep, tSamp);
+        
+        %plotto i ritardi calcolati sopra il plot di h
+        set(gcf, 'Units', 'Normalized', 'OuterPosition', [0, 0, 1, 1]);
+        subplot(numel(valuesSezval),numel(valuesAlfa),count);
+        figure(1)
+        plotTau(dh,tStep, tauPiuVR, 'ro', 'red', tauMenoVR, 'ro', 'magenta', tauPiuSR, 'rs', 'blue', tauMenoSR, 'rs', 'cyan');
+        grid on;
+        if count == 1
+            legend('Simulazione','Valvola+','Valvola-','Serbatoio+','Serbatoio-');
+        end
+        count = count + 1;
+        
+        %salvo nel formato TAUsvXXaXXdXXspXXXX[N].mat
+        filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
+        save(['workspaces/TA',filename,'.mat'],'dalfa','dh','tStep','tauPiuVR', 'tauPiuSR', 'tauMenoVR', 'tauMenoSR');
+    end
+end

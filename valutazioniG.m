@@ -14,7 +14,7 @@ valueDemand = 0.10;
 valueSezpiezo = 1000;
 segno = 'N';
 filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
-load(['TAU',filename,'.mat']);
+load(['workspaces/TAU',filename,'.mat']);
 
 %Regressione lineare per trovare i parametri theta di G
 [phi,y] = calcolaPhiEY(dalfa, dh, tauPiuVR);
@@ -42,9 +42,9 @@ grid on;
 %Plotto il confronto tra il modello predetto e la simulazione
 figure(3);
 [y,fit, cod, rmse] = compareSOD(G, dalfa, dh);
-title(['SezVal=',num2str(valueSezval),', alfa=',num2str(valueAlfa/100),', D=',num2str(valueDemand),', SezPiezo=',num2str(valueSezpiezo)]);
+title(['SezVal=',num2str(WDS.sezval),', alfa=',num2str(valueAlfa/100),', D=',num2str(valueDemand),', SezPiezo=',num2str(valueSezpiezo)]);
 
 %salvo nel formato IDsvXXaXXdXXspXXXX[N].mat
-filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
-savefig(['PicSim',filename,'.fig']);
-save(['ID',filename,'.mat']);
+filename = ['sv',num2str(WDS.sezval),'a',num2str(WP.alfa*100),'d',num2str(WP.D*100),'sp',num2str(WDS.sezpiezo),segno];
+savefig(['figures/PicSim',filename,'.fig']);
+save(['workspaces/ID',filename,'.mat']);

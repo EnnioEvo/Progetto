@@ -26,7 +26,7 @@ for valueSezval = valuesSezval
         
         %carico un workspace TSsvXXaXXdXXspXXXX[N].mat
         filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
-        load(['TS',filename,'.mat']);
+        load(['workspaces/TS',filename,'.mat']);
         
         %costruisco le timeserie delle variazioni
         dh = tserieVariazioni(h,WP.h);
@@ -57,8 +57,8 @@ for valueSezval = valuesSezval
         end
         count = count + 1;
         
-        %salvo nel formato TSsvXXaXXdXXspXXXX[N].mat
-        filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
-        save(['TAU',filename,'.mat'],'dalfa','dh','tStep','tauPiuVR', 'tauPiuSR', 'tauMenoVR', 'tauMenoSR');
+        %salvo nel formato TAUsvXXaXXdXXspXXXX[N].mat
+        filename = ['sv',num2str(WDS.sezval),'a',num2str(WP.alfa*100),'d',num2str(WP.D*100),'sp',num2str(WDS.sezpiezo),segno];
+        save(['workspaces/TAU',filename,'.mat'],'film','WP','WDS','dalfa','dh','tStep','tauPiuVR', 'tauPiuSR', 'tauMenoVR', 'tauMenoSR');
     end
 end

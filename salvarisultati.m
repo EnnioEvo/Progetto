@@ -23,7 +23,7 @@ valueDemand = 0.10;
 valueSezpiezo = 1000;
 segno = '';
 filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
-load(['WS',filename,'.mat']);
+load(['workspaces/WS',filename,'.mat']);
 %Input:WS, Output: TS
 
 %Seleziono un tempo limitato prima dello
@@ -57,7 +57,7 @@ resampleTS(h,alfa);
 %salvo in tre strutture la topologia, il punto di lavoro e l'occorrente per
 %il filmino
 WDS = struct('N',N,'scabrezza', scabrezza, 'diametro', Ddato, 'c', c, 'sezval', sezval, 'sezpiezo', sezpiezo, 'Velreg', Velreg, 'deltaX', deltaX);
-WP = struct('alfa',mean(alfa.data(1:idx2)),'H',mean(serbatoio),'D',mean(portata),'h',mean(h.data(1:idx2)));
+WP = struct('alfa',mean(alfa.data(1:idx2-1)),'H',mean(serbatoio),'D',mean(portata),'h',mean(h.data(1:idx2)));
 film = struct('N',N, 'Tfin', Tfin, 'H', Hcampionato, 'Q',Qcampionato);
 
 %plotto le due timeseries
@@ -69,5 +69,5 @@ plot(h,'LineWidth',2);
 grid on
 
 %salvo nel formato TSsvXXaXXdXXspXXXX[N].mat
-filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
-save(['TS',filename,'.mat'],'film','WP','WDS','alfa','h','tStep');
+filename = ['sv',num2str(WDS.sezval),'a',num2str(WP.alfa*100),'d',num2str(WP.D*100),'sp',num2str(WDS.sezpiezo),segno];
+save(['workspaces/TS',filename,'.mat'],'film','WP','WDS','alfa','h','tStep');
