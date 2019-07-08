@@ -1,6 +1,18 @@
+%valutazioniTau confronta graficamente i ritardi calcolati con quelli
+%osservati nella simulazione.
+%-carica un workspace TSsvXXaXXdXXspXXXX.mat contenente i dati topologici
+%WDS e le timeseries h e alfa
+%-crea le timeseries dh e dalfa delle variazioni di h e alfa
+%-calcola i ritardi e li arrotonda al tempo di campionamento delle
+%timeseries
+%-esegue il plot nello stesso riquadro la timeserie dh e i ritardi 
+%calcolati
+%-salva i ritardi calcolati in un file TAUsvXXaXXdXXspXXXX.mat
+
 clear variables;
 close all;
 
+%carico il file
 valuesSezval = 300;
 valuesAlfa = 69;
 valueDemand = 0.10;
@@ -12,22 +24,25 @@ count = 1;
 for valueSezval = valuesSezval
     for valueAlfa = valuesAlfa
         
+        %carico un workspace TSsvXXaXXdXXspXXXX[N].mat
         filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
         load(['TS',filename,'.mat']);
         
-        
+        %costruisco le timeserie delle variazioni
         dh = tserieVariazioni(h,WP.h);
         dalfa = tserieVariazioni(alfa,WP.alfa);
-        nTau = 6; %numero di tau da calcolare
-        tSamp = h.time(2)-h.time(1);
-
+       
         %calcolo i ritardi
+        nTau = 6; %numero di tau da calcolare
         [tauPiuV, tauMenoV, tauPiuS, tauMenoS] = calcolaTau(nTau,WDS);
         %approssimo i ritardi al tempo di campionamento
         tauPiuVR = roundTau(tauPiuV,tSamp);
         tauMenoVR = roundTau(tauMenoV,tSamp);
         tauPiuSR = roundTau(tauPiuS,tSamp);
         tauMenoSR = roundTau(tauMenoS,tSamp);
+        
+        %arrotondo tStep al tempo di campionamento
+        tSamp = h.time(2)-h.time(1);
         tStep = roundTau(tStep, tSamp);
         
         %plotto i ritardi calcolati sopra il plot di h
@@ -41,6 +56,7 @@ for valueSezval = valuesSezval
         end
         count = count + 1;
         
+        %salvo nel formato TSsvXXaXXdXXspXXXX[N].mat
         filename = ['sv',num2str(valueSezval),'a',num2str(valueAlfa),'d',num2str(valueDemand*100),'sp',num2str(valueSezpiezo),segno];
         save(['TAU',filename,'.mat'],'dalfa','dh','tStep','tauPiuVR', 'tauPiuSR', 'tauMenoVR', 'tauMenoSR');
     end

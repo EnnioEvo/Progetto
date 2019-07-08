@@ -1,15 +1,34 @@
+%plotTau plotta uno o più vettori di ritardi in sovraimpressione al plot
+%della timeserie variazione di pressione dh.
+%
+%   plotTau(DH, TSTEP, TAU, MARKERTYPE, MARKERCOLOR) plotta un solo vettore
+%   di ritardi.
+%
+%   plotTau(DH, TSTEP, TAU, MARKERTYPE1, MARKERCOLOR1, TAU2, MARKERTYPE2, 
+%   MARKERCOLOR2) plotta due vettori di ritardi.
+%
+%   plotTau(DH, TSTEP, TAU1, MT1, MC1, ... , tauN, MTN, MCN) plotta N
+%   vettori dei ritardi.
+%
+%   Esempio
+%   plotTau(dh, tstep, tau1, 'ro', 'red').
+
 function [] = plotTau(varargin)
     nTau = (nargin - 2)/3;
+    %Controllo che nargin = 2 + 3k, con k>0
     if (nTau ~= round(nTau))||(nTau<=0)
        disp("Gli argomenti sono nel formato sbagliato.");
        return;
     end
     
-    
+    %rinomino gli argomenti
     dh = varargin{1};
     tStep = varargin{2};
-    trovaXInDhTime = @(x)find(dh.time==x,1);
-    idxTStep = trovaXInDhTime(tStep);
+    
+    %trovo l'indice di tStep nel vettore dei tempi
+    idxTStep = find(dh.time==tStep,1);
+    
+    %plotto la timeSerie
     plot(dh);
     hold on
     
@@ -17,7 +36,8 @@ function [] = plotTau(varargin)
         tau = varargin{3*i};
         type = varargin{3*i + 1};
         color = varargin{3*i + 2};
-        idxTau = cell2mat(arrayfun(trovaXInDhTime , tau, 'un', 0));
+        %Cancellare se il codice funziona: idxTau = cell2mat(arrayfun(trovaXInDhTime , tau, 'un', 0));
+        idxTau = tau/(dh.time(2)-dh.time(1));
         plot(dh.time(idxTau+idxTStep),dh.data(idxTau+idxTStep),type,'MarkerEdgeColor',color);
         hold on
     end

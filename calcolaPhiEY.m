@@ -1,5 +1,13 @@
+%calcolaPhiEY calcolo i due elementi necessari per la regressione lineare.
+%
+%   [PHI,Y] = calcolaPhiEY(DALFA, DH, TAU) supposto che DH sia ottenuto
+%   come una somma di DALFA ritardati nel tempo, un contributo per ogni
+%   ritardo nel vettore TAU, calcolo i parametri necessari alla regressione
+%   lineare e quindi a trovare il coefficiente di ogni contributo.
+
 function [phi,y] = calcolaPhiEY(dalfa,dh, tau)
     
+%   Cancellare se funziona
 %   Controllo il campionamento di dalfa e dh
 %   tSamp = round(mean(diff(dh.time)));
 %    if min(diff(dh.time))<max(diff(dh.time))
@@ -9,16 +17,15 @@ function [phi,y] = calcolaPhiEY(dalfa,dh, tau)
 %        dh = resample(dh,vetTUniform);
 %    end
    
+    %ricampiono per sicurezza
     resampleTS(dalfa,dh);
     tSamp = round(mean(diff(dh.time)));
-    %Ricampiono tau in ogni caso
     tau = roundTau(tau,tSamp);
     
-    %tauPiuVR = tauPiuVR(1:4);
-    %trovaXInDhTime = @(x)find(dh.time==x,1); %sostituire con una divisione
-    %idxTauPiuV = cell2mat(arrayfun(trovaXInDhTime , tauPiuVR, 'un', 0));
+    %trovo l'indice di tau in dh.time
     idxTau = tau/tSamp + 1;
     
+    %rinomino per chiarezza
     u = dalfa.data;
     y = dh.data;
     

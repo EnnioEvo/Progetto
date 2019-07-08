@@ -211,6 +211,9 @@ for a_iniziale = 0.69
         if DeltaA<0
             segno = 'N';
         end
+        
+        
+        %salvo nel formato WSsvXXaXXdXXspXXXX[N].mat
         filename = ['sv',num2str(sezval),'a',num2str(a_iniziale*100),'d',num2str(demand*100),'sp',num2str(sezpiezo),segno];
         save(['WS',filename,'.mat'])
     end

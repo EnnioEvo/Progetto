@@ -1,4 +1,4 @@
-function [tauPiuV, tauMenoV, tauPiuS, tauMenoS] = calcolaTau(n, wds)
+function [tauPiuV, tauMenoV, tauPiuS, tauMenoS] = calcolaTau(tFin, wds)
     viaggioMonteSerbatoio = (wds.sezpiezo)*wds.deltaX/wds.c;
     viaggioMonteValvola = (wds.sezpiezo - wds.sezval)*wds.deltaX/wds.c;
     viaggioValle = (wds.N - wds.sezpiezo)*wds.deltaX/wds.c;
@@ -13,5 +13,4 @@ function [tauPiuV, tauMenoV, tauPiuS, tauMenoS] = calcolaTau(n, wds)
     tauMenoV = calcolaUnTauMenoV(1:n);
     tauPiuS = calcolaUnTauPiuS(1:n);
     tauMenoS = calcolaUnTauMenoS(1:n);
-    
 end
